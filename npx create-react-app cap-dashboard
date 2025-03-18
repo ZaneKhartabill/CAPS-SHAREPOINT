@@ -1,0 +1,647 @@
+import React, { useState } from 'react';
+import { Calendar, Clock, Users, Map, Activity, Wind, Home, FileText, CheckSquare, AlertTriangle, Info } from 'lucide-react';
+
+const CAPDashboard = () => {
+  const [activeTab, setActiveTab] = useState('about');
+
+  // Sample team data - would be replaced with actual team data
+  const teamMembers = [
+    { 
+      name: "Dr. Markey Johnson", 
+      role: "Principal Investigator", 
+      org: "Health Canada",
+      image: "/api/placeholder/100/100"
+    },
+    { 
+      name: "Christie McMann", 
+      role: "Project Manager", 
+      org: "Health Canada",
+      image: "/api/placeholder/100/100"
+    },
+    { 
+      name: "Ryan Kulka", 
+      role: "Air Quality Expert", 
+      org: "Health Canada",
+      image: "/api/placeholder/100/100"
+    },
+    { 
+      name: "Dr. Mengting Xu", 
+      role: "Epidemiologist", 
+      org: "CARTaGENE",
+      image: "/api/placeholder/100/100"
+    },
+    { 
+      name: "Dr. Vikki Ho", 
+      role: "Scientific Director", 
+      org: "CARTaGENE",
+      image: "/api/placeholder/100/100"
+    }
+  ];
+
+  // Sample milestone data - would be pulled from Excel/tracking sheet
+  const latestMilestones = [
+    {
+      id: 1,
+      title: "Purchase of PurpleAir sensors complete",
+      date: "January 9, 2025",
+      status: "Completed",
+      category: "Sensor Procurement"
+    },
+    {
+      id: 2,
+      title: "Participant recruitment webinar",
+      date: "February 15, 2025",
+      status: "Upcoming",
+      category: "Communications"
+    },
+    {
+      id: 3,
+      title: "Baseline questionnaire translation",
+      date: "January 20, 2025",
+      status: "In Progress",
+      category: "Communications"
+    },
+    {
+      id: 4,
+      title: "MS Fabric setup for data infrastructure",
+      date: "January 15, 2025",
+      status: "At Risk",
+      category: "Data Infrastructure"
+    }
+  ];
+
+  // Sample study regions
+  const regions = [
+    { name: "Montreal", participants: 150 },
+    { name: "Quebec City", participants: 95 },
+    { name: "Gatineau", participants: 65 },
+    { name: "Sherbrooke", participants: 55 },
+    { name: "Trois-Rivières", participants: 45 },
+    { name: "Saguenay", participants: 40 }
+  ];
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case "Completed": return "bg-green-100 text-green-800";
+      case "In Progress": return "bg-blue-100 text-blue-800";
+      case "Upcoming": return "bg-purple-100 text-purple-800";
+      case "At Risk": return "bg-yellow-100 text-yellow-800";
+      case "Delayed": return "bg-red-100 text-red-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-blue-700 text-white">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-blue-700"></div>
+          <img 
+            src="/api/placeholder/1920/400" 
+            alt="Air quality background" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            CARTaGENE Air Pollution Study
+          </h1>
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
+            Understanding how wildfires affect air quality and health in Quebec homes
+          </p>
+          <div className="mt-8 flex space-x-4">
+            <button className="bg-white text-blue-700 px-5 py-2 rounded-full font-medium hover:bg-blue-50 transition-colors">
+              Learn More
+            </button>
+            <button className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-500 transition-colors">
+              For Participants
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Navigation Tabs */}
+      <div className="border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex -mb-px space-x-8">
+            <button
+              onClick={() => setActiveTab('about')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'about'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              About the Study
+            </button>
+            <button
+              onClick={() => setActiveTab('team')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'team'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Meet the Team
+            </button>
+            <button
+              onClick={() => setActiveTab('progress')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'progress'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Project Progress
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        {/* About the Study Tab */}
+        {activeTab === 'about' && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <Info className="mr-2 text-blue-600" size={28} />
+                  What is the CAP Study?
+                </h2>
+                <p className="text-gray-600 mb-4">
+                  The CARTaGENE Air Pollution (CAP) Study is examining how wildfires and other air pollution sources 
+                  affect indoor air quality and health in Quebec. We're collecting real-time air quality data from 500 homes 
+                  across six urban areas, combined with questionnaires about housing characteristics, behaviors, and health symptoms.
+                </p>
+                <div className="grid md:grid-cols-3 gap-6 mt-8">
+                  <div className="bg-blue-50 p-5 rounded-lg flex flex-col items-center text-center">
+                    <Wind className="text-blue-600 mb-3" size={36} />
+                    <h3 className="font-semibold text-gray-900 mb-2">Air Quality Monitoring</h3>
+                    <p className="text-gray-600 text-sm">Indoor and outdoor sensors tracking PM2.5, temperature, and more in participants' homes</p>
+                  </div>
+                  <div className="bg-blue-50 p-5 rounded-lg flex flex-col items-center text-center">
+                    <FileText className="text-blue-600 mb-3" size={36} />
+                    <h3 className="font-semibold text-gray-900 mb-2">Health Impact Assessment</h3>
+                    <p className="text-gray-600 text-sm">Understanding how air pollution affects respiratory and cardiovascular health in older adults</p>
+                  </div>
+                  <div className="bg-blue-50 p-5 rounded-lg flex flex-col items-center text-center">
+                    <Home className="text-blue-600 mb-3" size={36} />
+                    <h3 className="font-semibold text-gray-900 mb-2">Protection Strategies</h3>
+                    <p className="text-gray-600 text-sm">Evaluating which risk mitigation behaviors are most effective for improving indoor air</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <Map className="mr-2 text-blue-600" size={24} />
+                    Study Regions
+                  </h2>
+                  <div className="space-y-3">
+                    {regions.map((region) => (
+                      <div key={region.name} className="flex justify-between items-center border-b border-gray-100 pb-2">
+                        <span className="text-gray-700">{region.name}</span>
+                        <div className="flex items-center">
+                          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                            {region.participants} participants
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <Calendar className="mr-2 text-blue-600" size={24} />
+                    Study Timeline
+                  </h2>
+                  <div className="relative">
+                    <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-blue-100"></div>
+                    <div className="space-y-6 relative">
+                      <div className="ml-8 relative">
+                        <div className="absolute -left-8 bg-blue-600 rounded-full w-4 h-4 flex items-center justify-center"></div>
+                        <h3 className="font-medium text-gray-900">April 2024 - March 2025</h3>
+                        <p className="text-gray-600 text-sm">Study preparation, ethics approval, and initial recruitment</p>
+                      </div>
+                      <div className="ml-8 relative">
+                        <div className="absolute -left-8 bg-blue-600 rounded-full w-4 h-4 flex items-center justify-center"></div>
+                        <h3 className="font-medium text-gray-900">April 2025 - March 2026</h3>
+                        <p className="text-gray-600 text-sm">Sensor deployment and baseline data collection</p>
+                      </div>
+                      <div className="ml-8 relative">
+                        <div className="absolute -left-8 bg-blue-200 border-2 border-blue-600 rounded-full w-4 h-4 flex items-center justify-center"></div>
+                        <h3 className="font-medium text-gray-900">April 2026 - March 2029</h3>
+                        <p className="text-gray-600 text-sm">Continuous monitoring and analysis</p>
+                      </div>
+                      <div className="ml-8 relative">
+                        <div className="absolute -left-8 bg-gray-200 border-2 border-gray-300 rounded-full w-4 h-4 flex items-center justify-center"></div>
+                        <h3 className="font-medium text-gray-900">April 2029 - March 2030</h3>
+                        <p className="text-gray-600 text-sm">Final analysis and reporting</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Team Tab */}
+        {activeTab === 'team' && (
+          <div>
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Users className="mr-2 text-blue-600" size={28} />
+                  Meet Our Team
+                </h2>
+                <p className="text-gray-600 mb-8">
+                  The CAP Study brings together experts from Health Canada, CARTaGENE, INSPQ, and academic institutions 
+                  across Canada to study air pollution, indoor air quality, and health impacts.
+                </p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {teamMembers.map((member, index) => (
+                    <div key={index} className="bg-gray-50 rounded-lg p-4 flex items-center">
+                      <img 
+                        src={member.image} 
+                        alt={member.name} 
+                        className="w-16 h-16 rounded-full mr-4 object-cover"
+                      />
+                      <div>
+                        <h3 className="font-medium text-gray-900">{member.name}</h3>
+                        <p className="text-gray-500 text-sm">{member.role}</p>
+                        <p className="text-blue-600 text-xs">{member.org}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-8 text-center">
+                  <button className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors inline-flex items-center">
+                    <Users className="mr-2" size={18} />
+                    View Full Team Directory
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <Activity className="mr-2 text-blue-600" size={24} />
+                    Partner Organizations
+                  </h2>
+                  <div className="space-y-4">
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <img src="/api/placeholder/60/60" alt="Health Canada" className="mr-4" />
+                      <div>
+                        <h3 className="font-medium text-gray-900">Health Canada</h3>
+                        <p className="text-gray-500 text-sm">Lead research institution</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <img src="/api/placeholder/60/60" alt="CARTaGENE" className="mr-4" />
+                      <div>
+                        <h3 className="font-medium text-gray-900">CARTaGENE</h3>
+                        <p className="text-gray-500 text-sm">Public research platform</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <img src="/api/placeholder/60/60" alt="INSPQ" className="mr-4" />
+                      <div>
+                        <h3 className="font-medium text-gray-900">INSPQ</h3>
+                        <p className="text-gray-500 text-sm">Institut national de santé publique du Québec</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <Users className="mr-2 text-blue-600" size={24} />
+                    Functional Teams
+                  </h2>
+                  <div className="space-y-4">
+                    <div className="border-l-4 border-blue-600 pl-4">
+                      <h3 className="font-medium text-gray-900">Field Study Operations</h3>
+                      <p className="text-gray-500 text-sm">Recruitment, sensor deployment, and participant support</p>
+                    </div>
+                    <div className="border-l-4 border-green-600 pl-4">
+                      <h3 className="font-medium text-gray-900">Data Management & Analytics</h3>
+                      <p className="text-gray-500 text-sm">Sensor data processing, quality control, and modeling</p>
+                    </div>
+                    <div className="border-l-4 border-purple-600 pl-4">
+                      <h3 className="font-medium text-gray-900">Health Analysis</h3>
+                      <p className="text-gray-500 text-sm">Epidemiological analysis and health impact assessment</p>
+                    </div>
+                    <div className="border-l-4 border-yellow-600 pl-4">
+                      <h3 className="font-medium text-gray-900">Communications & Engagement</h3>
+                      <p className="text-gray-500 text-sm">Participant resources, reports, and knowledge translation</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Progress Tab */}
+        {activeTab === 'progress' && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <CheckSquare className="mr-2 text-blue-600" size={28} />
+                  Latest Milestones
+                </h2>
+                <div className="overflow-hidden">
+                  <div className="space-y-4 mt-6">
+                    {latestMilestones.map((milestone) => (
+                      <div key={milestone.id} className="flex">
+                        <div className="flex-shrink-0 flex flex-col items-center mr-4">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                            milestone.status === "Completed" ? "bg-green-100" : 
+                            milestone.status === "In Progress" ? "bg-blue-100" : 
+                            milestone.status === "At Risk" ? "bg-yellow-100" : 
+                            milestone.status === "Delayed" ? "bg-red-100" : "bg-purple-100"
+                          }`}>
+                            {milestone.status === "Completed" ? (
+                              <CheckSquare size={16} className="text-green-600" />
+                            ) : milestone.status === "At Risk" ? (
+                              <AlertTriangle size={16} className="text-yellow-600" />
+                            ) : (
+                              <Clock size={16} className={
+                                milestone.status === "In Progress" ? "text-blue-600" : 
+                                milestone.status === "Delayed" ? "text-red-600" : "text-purple-600"
+                              } />
+                            )}
+                          </div>
+                          <div className="h-full w-0.5 bg-gray-200 mx-auto"></div>
+                        </div>
+                        <div className="min-w-0 flex-1 pt-1 pb-5">
+                          <div className="flex justify-between">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(milestone.status)}`}>
+                              {milestone.status}
+                            </span>
+                            <span className="text-gray-500 text-sm">{milestone.date}</span>
+                          </div>
+                          <p className="text-gray-900 font-medium mt-2">{milestone.title}</p>
+                          <p className="text-gray-500 text-sm mt-1">{milestone.category}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-6 text-center">
+                  <button className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors inline-flex items-center">
+                    <CheckSquare className="mr-2" size={18} />
+                    View Full Milestone Tracker
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <Users className="mr-2 text-blue-600" size={24} />
+                    Recruitment Status
+                  </h2>
+                  <div className="flex justify-center">
+                    <div className="relative pt-5">
+                      <div className="overflow-hidden h-4 w-64 rounded-full bg-gray-200">
+                        <div className="h-full bg-blue-600 rounded-full" style={{ width: '65%' }}></div>
+                      </div>
+                      <div className="mt-1 text-center text-sm text-gray-600">325 of 500 participants recruited</div>
+                      <div className="absolute top-0 left-32 transform -translate-x-1/2 text-blue-700 font-bold">
+                        65%
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-gray-600">Self-setup:</span>
+                      <span className="font-medium text-gray-900">60%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Technician-setup:</span>
+                      <span className="font-medium text-gray-900">40%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <Wind className="mr-2 text-blue-600" size={24} />
+                    Sensor Deployment
+                  </h2>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 text-sm">Indoor sensors active:</span>
+                      <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                        278
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 text-sm">Outdoor sensors active:</span>
+                      <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                        275
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 text-sm">NAPS collocated sensors:</span>
+                      <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
+                        8 of 10
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 text-sm">Setup verified (photos):</span>
+                      <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+                        83%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <FileText className="mr-2 text-blue-600" size={24} />
+                    Questionnaires
+                  </h2>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-gray-600">Baseline completion:</span>
+                        <span className="font-medium text-gray-900">92%</span>
+                      </div>
+                      <div className="h-2 w-full bg-gray-200 rounded-full">
+                        <div className="h-full bg-blue-600 rounded-full" style={{ width: '92%' }}></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-gray-600">Acute completion (avg):</span>
+                        <span className="font-medium text-gray-900">73%</span>
+                      </div>
+                      <div className="h-2 w-full bg-gray-200 rounded-full">
+                        <div className="h-full bg-blue-600 rounded-full" style={{ width: '73%' }}></div>
+                      </div>
+                    </div>
+                    <div className="pt-2">
+                      <span className="text-gray-700 text-sm font-medium">Recent Air Quality Events:</span>
+                      <div className="mt-2 space-y-2">
+                        <div className="bg-yellow-50 text-yellow-800 text-xs p-2 rounded">
+                          <div className="font-medium">Winter smog alert - Montreal</div>
+                          <div>Jan 15, 2025 • 75% response rate</div>
+                        </div>
+                        <div className="bg-gray-50 text-gray-800 text-xs p-2 rounded">
+                          <div className="font-medium">Control period</div>
+                          <div>Jan 8, 2025 • 70% response rate</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-blue-50 rounded-xl shadow-sm overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                  <Calendar className="mr-2 text-blue-600" size={24} />
+                  Upcoming Activities
+                </h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-white p-4 rounded-lg">
+                    <div className="flex items-start">
+                      <div className="bg-blue-100 text-blue-800 rounded-lg w-12 h-12 flex flex-col items-center justify-center mr-4 flex-shrink-0">
+                        <span className="text-sm font-bold">FEB</span>
+                        <span className="text-lg font-bold">15</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-900">Participant Recruitment Webinar</h3>
+                        <p className="text-gray-500 text-sm mt-1">Virtual introduction to the CAP study for potential participants</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg">
+                    <div className="flex items-start">
+                      <div className="bg-blue-100 text-blue-800 rounded-lg w-12 h-12 flex flex-col items-center justify-center mr-4 flex-shrink-0">
+                        <span className="text-sm font-bold">MAR</span>
+                        <span className="text-lg font-bold">01</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-900">Sensor Deployment - Gatineau</h3>
+                        <p className="text-gray-500 text-sm mt-1">Beginning of sensor installations for Gatineau participants</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg">
+                    <div className="flex items-start">
+                      <div className="bg-blue-100 text-blue-800 rounded-lg w-12 h-12 flex flex-col items-center justify-center mr-4 flex-shrink-0">
+                        <span className="text-sm font-bold">MAR</span>
+                        <span className="text-lg font-bold">15</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-900">Team Progress Meeting</h3>
+                        <p className="text-gray-500 text-sm mt-1">Bi-weekly project status update and planning meeting</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg">
+                    <div className="flex items-start">
+                      <div className="bg-blue-100 text-blue-800 rounded-lg w-12 h-12 flex flex-col items-center justify-center mr-4 flex-shrink-0">
+                        <span className="text-sm font-bold">APR</span>
+                        <span className="text-lg font-bold">05</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-900">MS Fabric Implementation</h3>
+                        <p className="text-gray-500 text-sm mt-1">Target date for data infrastructure completion</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Footer */}
+      <div className="bg-gray-50 border-t border-gray-200 mt-8">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          <div className="md:flex md:justify-between">
+            <div className="mb-8 md:mb-0 md:max-w-md">
+              <h3 className="text-lg font-semibold text-gray-900">CARTaGENE Air Pollution Study</h3>
+              <p className="mt-2 text-gray-600 text-sm">
+                A collaboration between Health Canada, CARTaGENE, and the Institut national de santé publique du Québec
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Resources</h3>
+                <ul className="mt-4 space-y-2">
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Project Overview</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Participant Materials</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Sensor Setup Guide</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Team</h3>
+                <ul className="mt-4 space-y-2">
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Team Directory</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Partner Organizations</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Contact Us</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Get Involved</h3>
+                <ul className="mt-4 space-y-2">
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">For Participants</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Support Resources</a></li>
+                  <li><a href="#" className="text-sm text-gray-600 hover:text-blue-600">Frequently Asked Questions</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between">
+            <div className="flex space-x-6 md:order-2">
+              <a href="#" className="text-gray-400 hover:text-gray-500">
+                Health Canada
+              </a>
+              <a href="#" className="text-gray-400 hover:text-gray-500">
+                CARTaGENE
+              </a>
+              <a href="#" className="text-gray-400 hover:text-gray-500">
+                INSPQ
+              </a>
+            </div>
+            <p className="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
+              &copy; 2025 Health Canada. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CAPDashboard;
